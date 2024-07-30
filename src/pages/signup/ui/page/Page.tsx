@@ -11,15 +11,26 @@ import {
   Container,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { signUp } from "../../../../features/auth/api/Signup";
 
 export const SignupPage = () => {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    try {
+      const result = await signUp(data);
+      if (result) {
+        // 에러 발생
+        alert(result);
+      } else {
+        // 성공
+        alert("회원가입이 성공적으로 완료되었습니다.");
+        // 여기에 회원가입 성공 후 처리 로직 추가 (예: 로그인 페이지로 리다이렉트)
+      }
+    } catch (error) {
+      console.error("Signup failed:", error);
+      alert("회원가입 중 오류가 발생했습니다.");
+    }
   };
 
   return (
@@ -57,10 +68,10 @@ export const SignupPage = () => {
               <TextField
                 required
                 fullWidth
-                id='loginId'
-                label='Login ID'
-                name='loginId'
-                autoComplete='loginId'
+                id='email'
+                label='Email for Login ID'
+                name='email'
+                autoComplete='email'
               />
             </Grid>
             <Grid item xs={12}>
